@@ -1,0 +1,25 @@
+{
+  "name": "socket-chat-app",
+  "version": "1.0.0",
+  "description": "Simple chatting app this was built from following the [chat](https://socket.io/get-started/chat) tutorial on socket.io.",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^3.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrandonVA/socket-chat-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BrandonVA/socket-chat-app/issues"
+  },
+  "homepage": "https://github.com/BrandonVA/socket-chat-app#readme"
+}

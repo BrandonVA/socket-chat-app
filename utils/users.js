@@ -14,7 +14,7 @@ const getCurrentUser = (id) => {
 };
 
 const userLeave = (id) => {
-  users = users.filter((user) => user.id === id);
+  users = users.filter((user) => user.id !== id);
 };
 
 const getRoomUsers = (room) => {

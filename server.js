@@ -41,12 +41,16 @@ io.on("connection", (socket) => {
         "message",
         formatMessage(adminName, `${user.username} has joined the chat`)
       );
+    //send user and room info
+    io.to(user.room).emit("roomUsers", {
+      room: user.room,
+      users: getRoomUsers(user.room),
+    });
   });
 
   // listen for chatMessage
   socket.on("chatMessage", (msg) => {
     const user = getCurrentUser(socket.id);
-    console.log(msg);
     io.to(user.room).emit("message", formatMessage(user.username, msg));
   });
 
@@ -55,10 +59,18 @@ io.on("connection", (socket) => {
     const user = getCurrentUser(socket.id);
     userLeave(socket.id);
 
-    io.to(user.room).emit(
-      "message",
-      formatMessage(adminName, `${user.username} has left the chat`)
-    );
+    if (user) {
+      // notify user when another user leaves
+      io.to(user.room).emit(
+        "message",
+        formatMessage(adminName, `${user.username} has left the chat`)
+      );
+      // update room and users
+      io.to(user.room).emit("roomUsers", {
+        room: user.room,
+        users: getRoomUsers(user.room),
+      });
+    }
   });
 });
 
@@ -67,42 +79,3 @@ app.get("/", (req, res) => {
 });
 
 server.listen(PORT, () => console.log("Server running on port: " + PORT));
-
-// const http = require("http").Server(app);
-// const io = require("socket.io")(http);
-
-// // Console.logs when a user is connected.
-// io.on("connection", (socket) => {
-//   console.log("a user connected");
-//   socket.on("disconnect", () => {
-//     console.log("user disconnected");
-//   });
-// });
-
-// // This will emit the event to all connected sockets supposed to but doesn't work??? -look into
-// io.on("connection", (socket) => {
-//   socket.on("chat message", (msg) => {
-//     console.log("message: " + msg);
-//   });
-// });
-
-// // doesn't work?
-// io.emit("some event", {
-//   someProperty: "some value",
-//   otherProperty: "other value",
-// });
-
-// // io.on("connection", (socket) => {
-// //   socket.broadcast.emit("hi");
-// // });
-
-// // sends the sends/console.logs message
-// io.on("connection", (socket) => {
-//   socket.on("chat message", (msg) => {
-//     io.emit("chat message", msg);
-//   });
-// });
-
-// http.listen(3000, () => {
-//   console.log("listening on *:3000");
-// });

@@ -5,9 +5,8 @@ const ENDPOINT = `${window.location.protocol}//${window.location.hostname}:3001$
 
 function App() {
   console.log(window.location);
-  // const [response, setResponse] = useState("");
   const [roomName, setRoomName] = useState("");
-  const [userList, setUserList] = useState("");
+  const [userList, setUserList] = useState([]);
   const [chat, setChat] = useState([]);
   const socketRef = useRef();
   const chatMessages = useRef();
@@ -21,9 +20,7 @@ function App() {
   };
 
   const outputUsers = (users) => {
-    setUserList(`
-    ${users.map((user) => `<li>${user.username}</li>`).join("")}
-    `);
+    setUserList(users);
   };
   // output message to DOM
   const outputMessage = (message) => {
@@ -81,7 +78,11 @@ function App() {
             <h3>
               <i className="fas fa-users"></i> Users
             </h3>
-            <ul id="users">{userList}</ul>
+            <ul id="users">
+              {userList.map((item, index) => (
+                <li key={index}>{item.username}</li>
+              ))}
+            </ul>
           </div>
           <div className="chat-messages" ref={chatMessages}>
             {chat.map((item, index) => (

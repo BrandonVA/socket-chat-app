@@ -4,15 +4,10 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 const server = require("http").Server(app); // http.createServer(app);
-// const server = app.listen(PORT);
-const io = require("socket.io")(server);
-// const socketio = require("socket.io");
 
-// const PORT = process.env.PORT || 3001;
+const io = require("socket.io")(server);
 
 const path = require("path");
-// const http = require("http");
-// const socketio = require("socket.io");
 
 // Send every request to the React app
 // Define any API routes before this runs
@@ -24,11 +19,6 @@ app.get("*", function (req, res) {
 //   console.log(`🌎 ==> API server now on port ${PORT}!`);
 // });
 
-// const server = http.createServer(app);
-// const server = app.listen(PORT);
-
-// const io = socketio(server);
-
 const formatMessage = require("./utils/messages");
 const {
   userJoin,
@@ -36,9 +26,6 @@ const {
   userLeave,
   getRoomUsers,
 } = require("./utils/users");
-
-// // serve static folder public
-// app.use(express.static("public"));
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
@@ -52,7 +39,7 @@ if (process.env.NODE_ENV === "production") {
 const adminName = "Socket Bot";
 
 // Run when a client connects
-io.on("connection", (socket) => {
+io.sockets.on("connection", (socket) => {
   console.log("connected to socket io");
 
   // Listens for when a user joins the room
@@ -106,31 +93,4 @@ io.on("connection", (socket) => {
     }
   });
 });
-
-// let interval;
-
-// io.sockets.on("connection", (socket) => {
-//   console.log("New client connected");
-//   if (interval) {
-//     clearInterval(interval);
-//   }
-//   interval = setInterval(() => getApiAndEmit(socket), 1000);
-//   socket.on("disconnect", () => {
-//     console.log("Client disconnected");
-//     clearInterval(interval);
-//   });
-// });
-
-// const getApiAndEmit = (socket) => {
-//   const response = new Date();
-//   // Emitting a new message. Will be consumed by the client
-//   socket.emit("FromAPI", response);
-// };
-
-// app.get("/", (req, res) => {
-//   res.send(path.join(__dirname + "/index.html"));
-// });
-
-// server.listen(4000, () => console.log("Server running on port: 4000"));
-
 server.listen(PORT, () => console.log("Server running on port: " + PORT));
